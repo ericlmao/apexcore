@@ -1,0 +1,4 @@
+name: ApexCore
+version: '${project.version}'
+main: games.negative.apexcore.ApexCore
+api-version: '1.20'

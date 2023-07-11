@@ -1,0 +1,4 @@
+name: ApexCore
+version: '1.0-SNAPSHOT'
+main: games.negative.apexcore.ApexCore
+api-version: '1.20'
