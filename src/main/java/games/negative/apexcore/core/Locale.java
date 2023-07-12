@@ -16,6 +16,25 @@ import java.util.List;
  */
 public enum Locale {
 
+    /*
+     * Generic Messages
+     */
+    GENERIC_PROFILE_ERROR("&cAn error occurred while attempting to retrieve your profile."),
+
+    IGNORE_HELP(
+            "&8&m----------------------------------------",
+            "&6&lIgnore &7- Block messages from players you don't want to see.",
+            "&7/ignore add <player> &8- &7Ignore a player.",
+            "&7/ignore remove <player> &8- &7Unignore a player.",
+            "&7/ignore list &8- &7List all ignored players.",
+            "&7/ignore clear &8- &7Clear all ignored players.",
+            "&8&m----------------------------------------"
+    ),
+
+    IGNORE_REMOVE_MULTIPLE("&aYou have removed &e%amount% &ausers from your ignored list."),
+
+    IGNORE_REMOVE_SINGLE("&aYou have removed &e%player% &afrom your ignored list."),
+
     ;
     private final String[] defMessage;
     private Message message;
