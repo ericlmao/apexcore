@@ -21,6 +21,8 @@ public enum Locale {
      */
     GENERIC_PROFILE_ERROR("&cAn error occurred while attempting to retrieve your profile."),
 
+    GENERIC_PLAYER_NOT_FOUND("&cThe player &e%player% &cwas not found."),
+
     IGNORE_HELP(
             "&8&m----------------------------------------",
             "&6&lIgnore &7- Block messages from players you don't want to see.",
@@ -34,6 +36,12 @@ public enum Locale {
     IGNORE_REMOVE_MULTIPLE("&aYou have removed &e%amount% &ausers from your ignored list."),
 
     IGNORE_REMOVE_SINGLE("&aYou have removed &e%player% &afrom your ignored list."),
+
+    IGNORE_ALREADY_IGNORING("&cYou are already ignoring &e%player%&c."),
+
+    IGNORE_ADD("&aYou are now ignoring &e%player%&a."),
+
+    IGNORE_NOT_IGNORING("&cYou are not ignoring &e%player%&c."),
 
     ;
     private final String[] defMessage;
