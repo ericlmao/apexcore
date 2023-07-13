@@ -36,6 +36,10 @@ public class CmdRemove implements Command {
 
         String[] args = context.args();
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+        if (!target.hasPlayedBefore()) {
+            Locale.GENERIC_PLAYER_NOT_FOUND.replace("%player%", args[0]).send(player);
+            return;
+        }
 
         UUID uuid = target.getUniqueId();
 
