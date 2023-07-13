@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class IgnoreListMenu extends ChestMenu {
 
@@ -52,6 +51,30 @@ public class IgnoreListMenu extends ChestMenu {
 
             if (meta instanceof SkullMeta skull)
                 skull.setOwningPlayer(player);
+        }
+
+        if (page > 1) {
+            ItemStack previous = new ItemStack(Material.ARROW);
+            ItemMeta meta = previous.getItemMeta();
+            if (meta == null) return;
+
+            meta.setDisplayName(ChatColor.RED + "Previous Page");
+
+            previous.setItemMeta(meta);
+
+            setItem(45, previous, "previous-page");
+        }
+
+        if (ignored.size() > page * limit) {
+            ItemStack next = new ItemStack(Material.ARROW);
+            ItemMeta meta = next.getItemMeta();
+            if (meta == null) return;
+
+            meta.setDisplayName(ChatColor.GREEN + "Next Page");
+
+            next.setItemMeta(meta);
+
+            setItem(53, next, "next-page");
         }
     }
 
