@@ -84,18 +84,18 @@ public class ApexDataManagerProvider implements ApexDataManager {
                 try {
                     boolean success = file.createNewFile();
                     if (success) plugin.getLogger().info("Created file " + file.getName() + "!");
-
-                    try (Writer writer = new FileWriter(file)) {
-                        gson.toJson(player, writer);
-                        plugin.getLogger().info("Saved player data to file " + file.getName() + "!");
-                    } catch (IOException e) {
-                        plugin.getLogger().warning("Failed to save player data to file " + file.getName() + "!");
-                        e.printStackTrace();
-                    }
                 } catch (IOException e) {
                     plugin.getLogger().warning("Failed to create file " + file.getName() + "!");
                     e.printStackTrace();
                 }
+            }
+
+            try (Writer writer = new FileWriter(file)) {
+                gson.toJson(player, writer);
+                plugin.getLogger().info("Saved player data to file " + file.getName() + "!");
+            } catch (IOException e) {
+                plugin.getLogger().warning("Failed to save player data to file " + file.getName() + "!");
+                e.printStackTrace();
             }
         }
     }
