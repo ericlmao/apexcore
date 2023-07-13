@@ -98,6 +98,9 @@ public class IgnoreListMenu extends ChestMenu {
             case "head" -> handleHead(player, item);
         }
 
+        event.setCancelled(true);
+        event.setCurrentItem(null);
+        player.updateInventory();
 
     }
 
