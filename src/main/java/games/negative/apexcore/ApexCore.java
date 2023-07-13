@@ -3,10 +3,7 @@ package games.negative.apexcore;
 import games.negative.alumina.AluminaPlugin;
 import games.negative.alumina.command.builder.CommandBuilder;
 import games.negative.apexcore.api.ApexAPI;
-import games.negative.apexcore.command.ignore.CmdAdd;
-import games.negative.apexcore.command.ignore.CmdList;
-import games.negative.apexcore.command.ignore.CmdRemove;
-import games.negative.apexcore.command.ignore.CommandIgnore;
+import games.negative.apexcore.command.ignore.*;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
 import games.negative.apexcore.listener.ApexProfileListener;
@@ -63,6 +60,12 @@ public final class ApexCore extends AluminaPlugin {
                                 new CommandBuilder(new CmdList(api))
                                         .name("list")
                                         .description("List all players on your ignore list.")
+                                        .playerOnly(),
+
+                                // ignore clear
+                                new CommandBuilder(new CmdClear(api))
+                                        .name("clear")
+                                        .description("Clear your ignore list.")
                                         .playerOnly()
                         )
         );
