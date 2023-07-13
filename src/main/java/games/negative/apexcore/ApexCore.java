@@ -9,7 +9,6 @@ import games.negative.apexcore.command.ignore.CmdRemove;
 import games.negative.apexcore.command.ignore.CommandIgnore;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class ApexCore extends AluminaPlugin {
