@@ -9,6 +9,7 @@ import games.negative.apexcore.command.ignore.CmdRemove;
 import games.negative.apexcore.command.ignore.CommandIgnore;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
+import games.negative.apexcore.listener.ApexProfileListener;
 import org.jetbrains.annotations.Nullable;
 
 public final class ApexCore extends AluminaPlugin {
@@ -22,6 +23,13 @@ public final class ApexCore extends AluminaPlugin {
         this.api = new ApexAPIProvider(this);
 
         handleCommands();
+        handleListeners();
+    }
+
+    private void handleListeners() {
+        registerListeners(
+                new ApexProfileListener(this)
+        );
     }
 
     @Override
