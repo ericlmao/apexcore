@@ -48,6 +48,16 @@
                         </configuration>
                     </execution>
                 </executions>
+
+                <!-- Shade Relocation -->
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>games.negative.alumina</pattern>
+                            <shadedPattern>games.negative.apexcore.libs.alumina</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
