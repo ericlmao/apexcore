@@ -51,6 +51,10 @@ public class IgnoreListMenu extends ChestMenu {
 
             if (meta instanceof SkullMeta skull)
                 skull.setOwningPlayer(player);
+
+            display.setItemMeta(meta);
+
+            addItem(display, "head");
         }
 
         if (page > 1) {
@@ -79,9 +83,12 @@ public class IgnoreListMenu extends ChestMenu {
     }
 
     @Override
-    public void onFunctionClick(@NotNull Player player, @NotNull MenuItem item, @NotNull InventoryClickEvent event) {
+    public void onClick(@NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
+    }
 
+    @Override
+    public void onFunctionClick(@NotNull Player player, @NotNull MenuItem item, @NotNull InventoryClickEvent event) {
         String key = item.key();
         if (key == null) return;
 
