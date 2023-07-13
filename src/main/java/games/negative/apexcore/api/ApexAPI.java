@@ -40,4 +40,9 @@ public interface ApexAPI {
      */
     @NotNull
     Map<UUID, ApexPlayer> getPlayers();
+
+    /**
+     * Runs disable methods throughout the API.
+     */
+    void disable();
 }

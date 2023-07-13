@@ -26,7 +26,7 @@ public final class ApexCore extends AluminaPlugin {
 
     @Override
     public void disable() {
-
+        api.disable();
     }
 
     private void handleCommands() {

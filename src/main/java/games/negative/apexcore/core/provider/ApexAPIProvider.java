@@ -51,4 +51,9 @@ public class ApexAPIProvider implements ApexAPI {
     public @NotNull Map<UUID, ApexPlayer> getPlayers() {
         return players;
     }
+
+    @Override
+    public void disable() {
+        data.disable(players);
+    }
 }
