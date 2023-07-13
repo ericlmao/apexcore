@@ -122,5 +122,13 @@
             <version>22.0.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- Lombok Annotations -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
