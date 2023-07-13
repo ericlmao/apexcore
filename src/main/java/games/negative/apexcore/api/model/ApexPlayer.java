@@ -18,12 +18,6 @@ public interface ApexPlayer {
     UUID getUniqueID();
 
     /**
-     * Get the player's first join date.
-     * @return The player's first join date.
-     */
-    long getJoinDate();
-
-    /**
      * Get the player's last seen date.
      * @return The player's last seen date.
      */
