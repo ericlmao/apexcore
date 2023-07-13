@@ -21,6 +21,8 @@ public enum Locale {
      */
     GENERIC_PROFILE_ERROR("&cAn error occurred while attempting to retrieve your profile."),
 
+    GENERIC_PROFILE_ERROR_OTHER("&cAn error occurred while attempting to retrieve the profile of the target user."),
+
     GENERIC_PLAYER_NOT_FOUND("&cThe player &e%player% &cwas not found."),
 
     IGNORE_HELP(
