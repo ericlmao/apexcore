@@ -46,14 +46,14 @@ public final class ApexCore extends AluminaPlugin {
                                 new CommandBuilder(new CmdAdd(api))
                                         .name("add")
                                         .description("Add a player to your ignore list.")
-                                        .params("<player>")
+                                        .params("player")
                                         .playerOnly(),
 
                                 // /ignore remove <player>
                                 new CommandBuilder(new CmdRemove(api))
                                         .name("remove")
                                         .description("Remove a player from your ignore list.")
-                                        .params("<player>")
+                                        .params("player")
                                         .playerOnly(),
 
                                 // /ignore list
