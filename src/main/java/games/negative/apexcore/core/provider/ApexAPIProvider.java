@@ -18,6 +18,8 @@ public class ApexAPIProvider implements ApexAPI {
     public ApexAPIProvider(@NotNull ApexCore plugin) {
         this.data = new ApexDataManagerProvider(plugin);
         this.players = data.init();
+
+        plugin.getLogger().info("Loaded " + players.size() + " players from data folder!");
     }
 
     @Override
