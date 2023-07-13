@@ -1,8 +1,10 @@
 package games.negative.apexcore.core.provider;
 
-import com.google.common.collect.Maps;
+import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.ApexAPI;
+import games.negative.apexcore.api.ApexDataManager;
 import games.negative.apexcore.api.model.ApexPlayer;
+import games.negative.apexcore.core.structure.ApexPlayerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,9 +14,10 @@ import java.util.UUID;
 public class ApexAPIProvider implements ApexAPI {
 
     private final Map<UUID, ApexPlayer> players;
-
-    public ApexAPIProvider() {
-        this.players = Maps.newHashMap();
+    private final ApexDataManager data;
+    public ApexAPIProvider(@NotNull ApexCore plugin) {
+        this.data = new ApexDataManagerProvider(plugin);
+        this.players = data.init();
     }
 
     @Override
@@ -24,16 +27,28 @@ public class ApexAPIProvider implements ApexAPI {
 
     @Override
     public boolean createPlayer(@NotNull UUID uuid) {
-        return false;
+        if (players.containsKey(uuid)) return false;
+
+        ApexPlayer player = new ApexPlayerImpl(uuid);
+        players.put(uuid, player);
+
+        return true;
     }
 
     @Override
     public boolean deletePlayer(@NotNull UUID uuid) {
-        return false;
+        if (!players.containsKey(uuid)) return false;
+
+        ApexPlayer player = players.get(uuid);
+        boolean success = data.deletePlayer(player);
+
+        if (success) players.remove(uuid);
+
+        return success;
     }
 
     @Override
     public @NotNull Map<UUID, ApexPlayer> getPlayers() {
-        return null;
+        return players;
     }
 }

@@ -19,7 +19,7 @@ public final class ApexCore extends AluminaPlugin {
     public void enable() {
         Locale.init(this);
 
-        this.api = new ApexAPIProvider();
+        this.api = new ApexAPIProvider(this);
 
         handleCommands();
     }
