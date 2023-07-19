@@ -45,7 +45,18 @@ public enum Locale {
 
     IGNORE_NOT_IGNORING("&cYou are not ignoring &e%player%&c."),
 
+    MESSAGE_NO_MESSAGE("&cYou must provide a message to send."),
+
+    MESSAGE_CANNOT_SEND_IGNORING("&cYou cannot send a message to &e%player%&c because you are ignoring them."),
+
+    MESSAGE_CANNOT_SEND_IGNORED("&cYou cannot send a message to &e%player%&c because they are ignoring you."),
+
+    MESSAGE_CANNOT_SEND_DISABLED("&cYou cannot send a message to &e%player%&c because they have messages disabled."),
+
+    MESSAGE_SENDER("&7To &e%player%&7: &f%message%"),
+    MESSAGE_RECEIVER("&7From &e%player%&7: &f%message%"),
     ;
+
     private final String[] defMessage;
     private Message message;
 
