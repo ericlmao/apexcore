@@ -1,6 +1,5 @@
 package games.negative.apexcore.api;
 
-import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.model.ApexPlayer;
 import org.jetbrains.annotations.NotNull;
 

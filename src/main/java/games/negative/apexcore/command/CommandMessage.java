@@ -7,10 +7,7 @@ import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.core.ApexPermission;
 import games.negative.apexcore.core.Locale;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
