@@ -1,6 +1,9 @@
 package games.negative.apexcore.api.model;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +12,16 @@ import java.util.UUID;
  * Represents a custom player object.
  */
 public interface ApexPlayer {
+
+    /**
+     * The default name color.
+     */
+    ChatColor DEFAULT_NAME_COLOR = ChatColor.WHITE;
+
+    /**
+     * The default message sound.
+     */
+    Sound DEFAULT_MESSAGE_SOUND = Sound.ENTITY_ARROW_HIT_PLAYER;
 
     /**
      * Gets the player's unique ID.
@@ -81,4 +94,29 @@ public interface ApexPlayer {
         return getIgnoredUsers().contains(uuid);
     }
 
+    /**
+     * Get the player's name color.
+     * @return The player's name color.
+     */
+    @NotNull
+    ChatColor getNameColor();
+
+    /**
+     * Set the player's name color.
+     * @param color The player's name color.
+     */
+    void setNameColor(@Nullable ChatColor color);
+
+    /**
+     * Get the player's message sound.
+     * @return The player's message sound.
+     */
+    @NotNull
+    Sound getMessageSound();
+
+    /**
+     * Set the player's message sound.
+     * @param sound The player's message sound.
+     */
+    void setMessageSound(@Nullable Sound sound);
 }
