@@ -6,6 +6,7 @@ import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.command.ignore.*;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
+import games.negative.apexcore.listener.ApexChatListener;
 import games.negative.apexcore.listener.ApexProfileListener;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +26,8 @@ public final class ApexCore extends AluminaPlugin {
 
     private void handleListeners() {
         registerListeners(
-                new ApexProfileListener(this)
+                new ApexProfileListener(this),
+                new ApexChatListener(api)
         );
     }
 
