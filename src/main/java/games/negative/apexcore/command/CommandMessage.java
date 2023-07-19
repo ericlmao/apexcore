@@ -4,6 +4,7 @@ import games.negative.alumina.command.Command;
 import games.negative.alumina.command.Context;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
+import games.negative.apexcore.core.ApexPermission;
 import games.negative.apexcore.core.Locale;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -17,8 +18,6 @@ import java.util.Arrays;
 public class CommandMessage implements Command {
 
     private final ApexAPI api;
-
-    private static final Permission MESSAGE_BYPASS = new Permission("apexcore.message.bypass", "Allows the player to bypass message restrictions.", PermissionDefault.OP);
 
     public CommandMessage(@NotNull ApexAPI api) {
         this.api = api;
@@ -70,7 +69,7 @@ public class CommandMessage implements Command {
         }
 
         // RECEIVER has messages disabled and SENDER does not have bypass permission
-        if (!recipient.isMessageable() && !sender.hasPermission(MESSAGE_BYPASS)) {
+        if (!recipient.isMessageable() && !sender.hasPermission(ApexPermission.MESSAGE_BYPASS)) {
             Locale.MESSAGE_CANNOT_SEND_DISABLED.replace("%player%", target.getName()).send(sender);
             return;
         }
