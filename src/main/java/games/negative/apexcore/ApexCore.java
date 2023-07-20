@@ -3,10 +3,7 @@ package games.negative.apexcore;
 import games.negative.alumina.AluminaPlugin;
 import games.negative.alumina.command.builder.CommandBuilder;
 import games.negative.apexcore.api.ApexAPI;
-import games.negative.apexcore.command.CommandMessage;
-import games.negative.apexcore.command.CommandReply;
-import games.negative.apexcore.command.CommandToggleMessage;
-import games.negative.apexcore.command.CommandToggleMessageSound;
+import games.negative.apexcore.command.*;
 import games.negative.apexcore.command.ignore.*;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
@@ -107,6 +104,15 @@ public final class ApexCore extends AluminaPlugin {
                 .name("togglemessagesound")
                 .aliases("tms", "togglemsgsound", "tmsgs", "togglepmsound", "tpms", "togglesound")
                 .description("Toggle private message sounds.")
+                .playerOnly()
+        );
+
+        // Register the /seen command
+        registerCommand(new CommandBuilder(new CommandSeen(api))
+                .name("seen")
+                .description("Check when a player was last online.")
+                .params("player")
+                .usage("/seen <player>")
                 .playerOnly()
         );
     }
