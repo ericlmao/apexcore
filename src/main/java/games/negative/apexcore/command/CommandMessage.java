@@ -6,6 +6,7 @@ import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.core.ApexPermission;
 import games.negative.apexcore.core.Locale;
+import games.negative.apexcore.core.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,7 @@ public class CommandMessage implements Command {
         }
 
         String[] messageRaw = Arrays.copyOfRange(args, 1, args.length);
-        String message = combine(messageRaw);
+        String message = TextUtil.combine(messageRaw);
 
         if (message.isEmpty()) {
             Locale.MESSAGE_NO_MESSAGE.send(sender);
@@ -77,14 +78,7 @@ public class CommandMessage implements Command {
         if (recipient.isMessageSound()) {
             target.playSound(target.getLocation(), recipient.getMessageSound(), 1, 1);
         }
-    }
 
-    private String combine(String[] args) {
-        StringBuilder builder = new StringBuilder();
-        for (String arg : args) {
-            builder.append(arg).append(" ");
-        }
-        return builder.toString().trim();
+        api.addConversation(sender.getUniqueId(), target.getUniqueId());
     }
-
 }
