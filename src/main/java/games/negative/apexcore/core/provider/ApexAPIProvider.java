@@ -1,5 +1,6 @@
 package games.negative.apexcore.core.provider;
 
+import com.google.common.collect.Maps;
 import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.ApexDataManager;
@@ -15,11 +16,15 @@ public class ApexAPIProvider implements ApexAPI {
 
     private final Map<UUID, ApexPlayer> players;
     private final ApexDataManager data;
+    private final Map<UUID, UUID> conversations;
+
     public ApexAPIProvider(@NotNull ApexCore plugin) {
         this.data = new ApexDataManagerProvider(plugin);
         this.players = data.init();
 
         plugin.getLogger().info("Loaded " + players.size() + " players from data folder!");
+
+        this.conversations = Maps.newHashMap();
     }
 
     @Override
@@ -58,4 +63,31 @@ public class ApexAPIProvider implements ApexAPI {
     public void disable() {
         data.disable(players);
     }
+
+    @Override
+    public Map<UUID, UUID> conversations() {
+        return conversations;
+    }
+
+    @Override
+    public void addConversation(@NotNull UUID player, @NotNull UUID recipient) {
+        this.conversations.remove(player);
+        this.conversations.put(player, recipient);
+    }
+
+    @Override
+    public void removeConversation(@NotNull UUID player) {
+        this.conversations.remove(player);
+    }
+
+    @Override
+    public boolean hasConversation(@NotNull UUID player) {
+        return this.conversations.containsKey(player);
+    }
+
+    @Override
+    public @Nullable UUID getConversation(@NotNull UUID player) {
+        return this.conversations.getOrDefault(player, null);
+    }
+
 }

@@ -45,4 +45,40 @@ public interface ApexAPI {
      * Runs disable methods throughout the API.
      */
     void disable();
+
+    /**
+     * Get the map of message conversations.
+     * @return The map of message conversations.
+     */
+    Map<UUID, UUID> conversations();
+
+    /**
+     * Add a new conversation entry.
+     * @param player The player
+     * @param recipient The recipient
+     */
+    void addConversation(@NotNull UUID player, @NotNull UUID recipient);
+
+    /**
+     * Remove a conversation entry.
+     * @param player The player
+     */
+    void removeConversation(@NotNull UUID player);
+
+    /**
+     * Check if a player has a conversation.
+     * @param player The player
+     * @return If the player has a conversation.
+     */
+    boolean hasConversation(@NotNull UUID player);
+
+    /**
+     * Get the conversation of a player.
+     * @param player The player
+     * @return The conversation of the player.
+     */
+    @Nullable
+    UUID getConversation(@NotNull UUID player);
+
+
 }
