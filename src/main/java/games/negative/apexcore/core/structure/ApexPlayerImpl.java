@@ -30,6 +30,18 @@ public class ApexPlayerImpl implements ApexPlayer {
     private long lastSeenDate;
 
     /*
+    The first seen date of the player.
+     */
+    @SerializedName("first-seen")
+    private long firstSeenDate;
+
+    /*
+    The ID of the player.
+     */
+    @SerializedName("id")
+    private int id;
+
+    /*
     If the player has message sounds enabled.
      */
     @SerializedName("message-sound")
@@ -55,15 +67,19 @@ public class ApexPlayerImpl implements ApexPlayer {
 
     /**
      * Constructor for the {@link ApexPlayer} implementation class.
-     * @param uuid The {@link UUID} of the player.
-     * @param lastSeenDate The last seen date of the player.
+     *
+     * @param uuid                The {@link UUID} of the player.
+     * @param id                 The ID of the player.
+     * @param lastSeenDate        The last seen date of the player.
      * @param messageSoundEnabled If the player has message sounds enabled.
-     * @param messageable If the player can be messaged.
-     * @param ignoredUsers The ignored users of the player.
+     * @param messageable         If the player can be messaged.
+     * @param ignoredUsers        The ignored users of the player.
      */
-    public ApexPlayerImpl(@NotNull UUID uuid, long lastSeenDate, boolean messageSoundEnabled, boolean messageable, @NotNull List<UUID> ignoredUsers) {
+    public ApexPlayerImpl(@NotNull UUID uuid, int id, long lastSeenDate, boolean messageSoundEnabled, boolean messageable, @NotNull List<UUID> ignoredUsers) {
         this.uuid = uuid;
+        this.id = id;
         this.lastSeenDate = lastSeenDate;
+        this.firstSeenDate = System.currentTimeMillis();
         this.messageSoundEnabled = messageSoundEnabled;
         this.messageable = messageable;
         this.ignoredUsers = ignoredUsers;
@@ -71,10 +87,11 @@ public class ApexPlayerImpl implements ApexPlayer {
 
     /**
      * Constructor for the {@link ApexPlayer} implementation class.
+     *
      * @param uuid The {@link UUID} of the player.
      */
-    public ApexPlayerImpl(@NotNull UUID uuid) {
-        this(uuid, System.currentTimeMillis(), false, true, List.of());
+    public ApexPlayerImpl(@NotNull UUID uuid, int id) {
+        this(uuid, id, System.currentTimeMillis(), false, true, List.of());
     }
 
     @Override
@@ -146,6 +163,16 @@ public class ApexPlayerImpl implements ApexPlayer {
     @Override
     public void setMessageSound(@Nullable Sound sound) {
         this.messageSound = (sound == null ? DEFAULT_MESSAGE_SOUND : sound);
+    }
+
+    @Override
+    public int getID() {
+        return id;
+    }
+
+    @Override
+    public long getFirstSeenDate() {
+        return firstSeenDate;
     }
 
 }

@@ -36,7 +36,9 @@ public class ApexAPIProvider implements ApexAPI {
     public boolean createPlayer(@NotNull UUID uuid) {
         if (players.containsKey(uuid)) return false;
 
-        ApexPlayer player = new ApexPlayerImpl(uuid);
+        int id = players.size() + 1;
+
+        ApexPlayer player = new ApexPlayerImpl(uuid, id);
         players.put(uuid, player);
 
         return true;

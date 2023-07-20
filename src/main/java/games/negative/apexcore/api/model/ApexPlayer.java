@@ -16,7 +16,7 @@ public interface ApexPlayer {
     /**
      * The default name color.
      */
-    ChatColor DEFAULT_NAME_COLOR = ChatColor.WHITE;
+    ChatColor DEFAULT_NAME_COLOR = ChatColor.GREEN;
 
     /**
      * The default message sound.
@@ -119,4 +119,17 @@ public interface ApexPlayer {
      * @param sound The player's message sound.
      */
     void setMessageSound(@Nullable Sound sound);
+
+    /**
+     * Get the first seen date of the player.
+     * @return The first seen date of the player.
+     */
+    long getFirstSeenDate();
+
+    /**
+     * Set the first seen date of the player.
+     * @return The first seen date of the player.
+     */
+    int getID();
+
 }
