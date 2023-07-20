@@ -53,8 +53,10 @@ public enum Locale {
 
     MESSAGE_CANNOT_SEND_DISABLED("&cYou cannot send a message to &e%player%&c because they have messages disabled."),
 
-    MESSAGE_SENDER("&7To &e%player%&7: &f%message%"),
-    MESSAGE_RECEIVER("&7From &e%player%&7: &f%message%"),
+    MESSAGE_SENDER("&7To &r%player%&7: &f%message%"),
+    MESSAGE_RECEIVER("&7From &r%player%&7: &f%message%"),
+
+    REPLY_CANNOT_SEND("&cYou have not sent a message to anyone yet."),
     ;
 
     private final String[] defMessage;
