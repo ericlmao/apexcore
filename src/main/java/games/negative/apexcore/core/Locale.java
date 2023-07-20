@@ -57,6 +57,14 @@ public enum Locale {
     MESSAGE_RECEIVER("&7From &r%player%&7: &f%message%"),
 
     REPLY_CANNOT_SEND("&cYou have not sent a message to anyone yet."),
+
+    MESSAGE_TOGGLE_SOUND_ENABLED("&aYou will now receive a sound when you receive a message."),
+    MESSAGE_TOGGLE_SOUND_DISABLED("&cYou will no longer receive a sound when you receive a message."),
+
+    MESSAGE_TOGGLE_ENABLED("&aYou will now receive messages."),
+    MESSAGE_TOGGLE_DISABLED("&cYou will no longer receive messages."),
+
+    LAST_SEEN("&7%player% &8- &7Last seen: &f%date%"),
     ;
 
     private final String[] defMessage;
