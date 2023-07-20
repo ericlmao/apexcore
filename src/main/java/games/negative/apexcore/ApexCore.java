@@ -3,6 +3,10 @@ package games.negative.apexcore;
 import games.negative.alumina.AluminaPlugin;
 import games.negative.alumina.command.builder.CommandBuilder;
 import games.negative.apexcore.api.ApexAPI;
+import games.negative.apexcore.command.CommandMessage;
+import games.negative.apexcore.command.CommandReply;
+import games.negative.apexcore.command.CommandToggleMessage;
+import games.negative.apexcore.command.CommandToggleMessageSound;
 import games.negative.apexcore.command.ignore.*;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
@@ -70,6 +74,40 @@ public final class ApexCore extends AluminaPlugin {
                                         .description("Clear your ignore list.")
                                         .playerOnly()
                         )
+        );
+
+        // Register the /message command
+        registerCommand(new CommandBuilder(new CommandMessage(api))
+                .name("message")
+                .aliases("msg", "m", "tell", "whisper", "w")
+                .description("Send a private message to a player.")
+                .params("player", "message")
+                .playerOnly()
+        );
+
+        // Register the /reply command
+        registerCommand(new CommandBuilder(new CommandReply(api))
+                .name("reply")
+                .aliases("r")
+                .description("Reply to a private message.")
+                .params("message")
+                .playerOnly()
+        );
+
+        // Register the /togglemessage command
+        registerCommand(new CommandBuilder(new CommandToggleMessage(api))
+                .name("togglemessage")
+                .aliases("tm", "togglemsg", "tmsg", "togglepm", "tpm")
+                .description("Toggle private messages.")
+                .playerOnly()
+        );
+
+        // Register the /togglemessagesound command
+        registerCommand(new CommandBuilder(new CommandToggleMessageSound(api))
+                .name("togglemessagesound")
+                .aliases("tms", "togglemsgsound", "tmsgs", "togglepmsound", "tpms", "togglesound")
+                .description("Toggle private message sounds.")
+                .playerOnly()
         );
     }
 

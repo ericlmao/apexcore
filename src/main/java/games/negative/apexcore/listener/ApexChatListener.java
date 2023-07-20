@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class ApexChatListener implements Listener {
 
@@ -24,16 +25,17 @@ public class ApexChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Player sender = event.getPlayer();
-
-        ApexPlayer user = api.getPlayer(sender.getUniqueId());
-        if (user == null) return;
+        UUID uuid = sender.getUniqueId();
 
         List<Player> toRemove = Lists.newArrayList();
-
         Set<Player> recipients = event.getRecipients();
+
         for (Player recipient : recipients) {
-            if (!user.isIgnoring(recipient.getUniqueId())) continue;
-            if (recipient.hasPermission(ApexPermission.IGNORE_BYPASS)) continue;
+            ApexPlayer user = api.getPlayer(recipient.getUniqueId());
+            if (user == null) continue;
+
+            if (!user.isIgnoring(uuid)) continue;
+            if (sender.hasPermission(ApexPermission.IGNORE_BYPASS)) continue;
 
             toRemove.add(recipient);
         }
