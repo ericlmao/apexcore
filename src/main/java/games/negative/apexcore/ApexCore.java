@@ -115,6 +115,13 @@ public final class ApexCore extends AluminaPlugin {
                 .usage("/seen <player>")
                 .playerOnly()
         );
+
+        // Register /datejoin command
+        registerCommand(new CommandBuilder(new CommandDateJoin(api))
+                .name("datejoin")
+                .description("Check when you first joined the server.")
+                .playerOnly()
+        );
     }
 
     /**

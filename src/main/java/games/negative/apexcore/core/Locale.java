@@ -65,6 +65,8 @@ public enum Locale {
     MESSAGE_TOGGLE_DISABLED("&cYou will no longer receive messages."),
 
     LAST_SEEN("&7%player% &8- &7Last seen: &f%date%"),
+
+    FIRST_SEEN("&aYou have first joined the server: &f%date% &7(%ago%)")
     ;
 
     private final String[] defMessage;
