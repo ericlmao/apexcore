@@ -2,7 +2,6 @@ package games.negative.apexcore.listener;
 
 import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.ApexAPI;
-import games.negative.apexcore.api.event.UniquePlayerJoinEvent;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.task.DelayedProfileInitTask;
 import org.bukkit.event.EventHandler;
