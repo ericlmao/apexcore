@@ -45,7 +45,7 @@ public class ApexChatListener implements Listener {
 
         String message = event.getMessage();
         if (!message.startsWith(">")) return;
-        
+
         event.setMessage(ChatColor.GREEN + message);
     }
 
