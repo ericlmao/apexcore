@@ -7,6 +7,7 @@ import games.negative.apexcore.api.ApexPlaceholderManager;
 import games.negative.apexcore.command.*;
 import games.negative.apexcore.command.ignore.*;
 import games.negative.apexcore.core.Locale;
+import games.negative.apexcore.core.Placeholder;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
 import games.negative.apexcore.listener.ApexChatListener;
 import games.negative.apexcore.listener.ApexProfileListener;
@@ -20,6 +21,7 @@ public final class ApexCore extends AluminaPlugin {
     @Override
     public void enable() {
         Locale.init(this);
+        Placeholder.init(this);
 
         this.api = new ApexAPIProvider(this);
 

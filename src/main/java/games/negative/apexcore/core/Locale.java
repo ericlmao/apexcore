@@ -66,7 +66,21 @@ public enum Locale {
 
     LAST_SEEN("&7%player% &8- &7Last seen: &f%date%"),
 
-    FIRST_SEEN("&aYou have first joined the server: &f%date% &7(%ago%)")
+    FIRST_SEEN("&aYou have first joined the server: &f%date% &7(%ago%)"),
+
+    SERVER_INFO(
+            "&8&m----------------------------------------",
+            "&6&lServer Info &7- Information about the server.",
+            "&7Server Start: &f%server_start%",
+            "&7Server Uptime: &f%uptime%",
+            " ",
+            "&7Unique Players: &f%unique%",
+            " ",
+            "&7TPS: &f%tps%",
+            " ",
+            "&7World Size: &f%size%",
+            "&8&m----------------------------------------"
+    ),
     ;
 
     private final String[] defMessage;
