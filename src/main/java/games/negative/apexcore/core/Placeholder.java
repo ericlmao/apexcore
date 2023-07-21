@@ -15,7 +15,8 @@ import java.util.List;
  */
 public enum Placeholder {
 
-    SERVER_START("Fri. July 1st, 2021")
+    SERVER_START("Fri. July 1st, 2021"),
+    DEFAULT_WORLD("world"),
     ;
 
     private String value;
@@ -67,5 +68,10 @@ public enum Placeholder {
                 plugin.getLogger().severe("Could not create messages.yml file!");
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 }

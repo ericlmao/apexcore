@@ -12,11 +12,14 @@ import games.negative.apexcore.core.provider.ApexAPIProvider;
 import games.negative.apexcore.listener.ApexChatListener;
 import games.negative.apexcore.listener.ApexProfileListener;
 import games.negative.apexcore.placeholder.UniqueIDPlaceholder;
+import games.negative.apexcore.task.TicksPerSecondTask;
 import org.jetbrains.annotations.Nullable;
 
 public final class ApexCore extends AluminaPlugin {
 
     private ApexAPI api;
+    private long start;
+    private TicksPerSecondTask tpsHandler;
 
     @Override
     public void enable() {
@@ -28,6 +31,10 @@ public final class ApexCore extends AluminaPlugin {
         handlePlaceholders();
         handleCommands();
         handleListeners();
+
+        this.start = System.currentTimeMillis();
+        this.tpsHandler = new TicksPerSecondTask();
+        this.tpsHandler.runTaskTimer(this, 0, 1);
     }
 
     private void handlePlaceholders() {
@@ -132,6 +139,13 @@ public final class ApexCore extends AluminaPlugin {
                 .description("Check when you first joined the server.")
                 .playerOnly()
         );
+
+        // Register /info command
+        registerCommand(new CommandBuilder(new CommandInfo(this))
+                .name("info")
+                .description("View server information.")
+                .playerOnly()
+        );
     }
 
     /**
@@ -143,5 +157,21 @@ public final class ApexCore extends AluminaPlugin {
     @Nullable
     public ApexAPI api() {
         return api;
+    }
+
+    /**
+     * Returns the time the server started in milliseconds.
+     * @return the time the server started in milliseconds
+     */
+    public long getStart() {
+        return start;
+    }
+
+    /**
+     * Returns the TicksPerSecondTask instance.
+     * @return the TicksPerSecondTask instance
+     */
+    public TicksPerSecondTask getTpsHandler() {
+        return tpsHandler;
     }
 }
