@@ -10,6 +10,9 @@ public class CommandInfo implements Command {
     @Override
     public void execute(@NotNull Context context) {
         Player player = context.getPlayer();
+        assert player != null;
+
+
     }
 
 }
