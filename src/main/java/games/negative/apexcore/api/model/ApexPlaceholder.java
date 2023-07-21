@@ -1,6 +1,7 @@
 package games.negative.apexcore.api.model;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +19,6 @@ public interface ApexPlaceholder {
      * @apiNote The return value can be null!
      */
     @Nullable
-    String handle(@NotNull OfflinePlayer player, @NotNull String[] params);
+    String handle(@NotNull Player player, @NotNull String[] params);
 
 }

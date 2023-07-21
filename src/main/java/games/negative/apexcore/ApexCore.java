@@ -3,12 +3,14 @@ package games.negative.apexcore;
 import games.negative.alumina.AluminaPlugin;
 import games.negative.alumina.command.builder.CommandBuilder;
 import games.negative.apexcore.api.ApexAPI;
+import games.negative.apexcore.api.ApexPlaceholderManager;
 import games.negative.apexcore.command.*;
 import games.negative.apexcore.command.ignore.*;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
 import games.negative.apexcore.listener.ApexChatListener;
 import games.negative.apexcore.listener.ApexProfileListener;
+import games.negative.apexcore.placeholder.UniqueIDPlaceholder;
 import org.jetbrains.annotations.Nullable;
 
 public final class ApexCore extends AluminaPlugin {
@@ -21,8 +23,14 @@ public final class ApexCore extends AluminaPlugin {
 
         this.api = new ApexAPIProvider(this);
 
+        handlePlaceholders();
         handleCommands();
         handleListeners();
+    }
+
+    private void handlePlaceholders() {
+        ApexPlaceholderManager manager = api.getPlaceholderManager();
+        manager.registerPlaceholder("user-id", new UniqueIDPlaceholder(api));
     }
 
     private void handleListeners() {

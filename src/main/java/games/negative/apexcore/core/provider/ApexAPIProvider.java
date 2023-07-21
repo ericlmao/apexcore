@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.ApexDataManager;
+import games.negative.apexcore.api.ApexPlaceholderManager;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.core.structure.ApexPlayerImpl;
 import org.jetbrains.annotations.NotNull;
@@ -16,10 +17,12 @@ public class ApexAPIProvider implements ApexAPI {
 
     private final Map<UUID, ApexPlayer> players;
     private final ApexDataManager data;
+    private final ApexPlaceholderManager placeholderManager;
     private final Map<UUID, UUID> conversations;
 
     public ApexAPIProvider(@NotNull ApexCore plugin) {
         this.data = new ApexDataManagerProvider(plugin);
+        this.placeholderManager = new ApexPlaceholderManagerProvider(plugin);
         this.players = data.init();
 
         plugin.getLogger().info("Loaded " + players.size() + " players from data folder!");
@@ -90,6 +93,11 @@ public class ApexAPIProvider implements ApexAPI {
     @Override
     public @Nullable UUID getConversation(@NotNull UUID player) {
         return this.conversations.getOrDefault(player, null);
+    }
+
+    @Override
+    public @NotNull ApexPlaceholderManager getPlaceholderManager() {
+        return placeholderManager;
     }
 
 }

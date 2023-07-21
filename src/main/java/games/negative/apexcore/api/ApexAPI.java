@@ -80,5 +80,10 @@ public interface ApexAPI {
     @Nullable
     UUID getConversation(@NotNull UUID player);
 
-
+    /**
+     * Get the placeholder manager.
+     * @return The placeholder manager.
+     */
+    @NotNull
+    ApexPlaceholderManager getPlaceholderManager();
 }
