@@ -1,9 +1,12 @@
 package games.negative.apexcore.listener;
 
+import games.negative.alumina.util.ColorUtil;
 import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
+import games.negative.apexcore.core.Placeholder;
 import games.negative.apexcore.task.DelayedProfileInitTask;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -32,7 +35,13 @@ public class ApexProfileListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+
+        String join = Placeholder.JOIN.toString();
+        join = join.replace("%player%", player.getName());
+
+        event.setJoinMessage(ColorUtil.translate(join));
 
         ApexPlayer user = api.getPlayer(uuid);
         if (user == null) return;
@@ -42,7 +51,13 @@ public class ApexProfileListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+
+        String quit = Placeholder.QUIT.toString();
+        quit = quit.replace("%player%", player.getName());
+
+        event.setQuitMessage(ColorUtil.translate(quit));
 
         ApexPlayer user = api.getPlayer(uuid);
         if (user == null) return;

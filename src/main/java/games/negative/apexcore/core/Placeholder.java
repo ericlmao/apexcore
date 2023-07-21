@@ -17,6 +17,9 @@ public enum Placeholder {
 
     SERVER_START("Fri. July 1st, 2021"),
     DEFAULT_WORLD("world"),
+
+    JOIN("&8[&2+&8] &7%player%"),
+    QUIT("&8[&4-&8] &7%player%"),
     ;
 
     private String value;
