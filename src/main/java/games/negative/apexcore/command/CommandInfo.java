@@ -13,6 +13,11 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class CommandInfo implements Command {
 
     private final ApexCore plugin;
@@ -37,16 +42,44 @@ public class CommandInfo implements Command {
         if (world == null)
             world = Bukkit.getWorlds().get(0);
 
-        if (world == null) throw new NullPointerException("World is null!");
+        if (world == null) throw new NullPointerException("No worlds found");
 
-        String size = world.getWorldFolder().getTotalSpace() / 1024 / 1024 + " MB";
+        long sizeBytes = calculateWorldSizeInBytes(world);
+        String parsed = formatSizeInBytes(sizeBytes);
 
         Locale.SERVER_INFO.replace("%server_start%", start)
                 .replace("%uptime%", uptime)
                 .replace("%tps%", tps)
                 .replace("%unique%", NumberUtil.parse(unique))
-                .replace("%size%", size)
+                .replace("%size%", parsed)
                 .send(player);
+    }
+
+    public long calculateWorldSizeInBytes(@NotNull World world) {
+        Path worldFolderPath = Paths.get(world.getWorldFolder().getPath());
+
+        try {
+            return Files.walk(worldFolderPath)
+                    .filter(p -> p.toFile().isFile())
+                    .mapToLong(p -> p.toFile().length())
+                    .sum();
+        } catch (IOException e) {
+            throw new RuntimeException("Error calculating world size", e);
+        }
+    }
+
+    public static String formatSizeInBytes(long bytes) {
+        if (bytes < 1024) {
+            return bytes + " B";
+        } else if (bytes < 1024 * 1024) {
+            return bytes / 1024 + " KB";
+        } else if (bytes < 1024 * 1024 * 1024) {
+            return bytes / (1024 * 1024) + " MB";
+        } else if (bytes < 1024L * 1024 * 1024 * 1024) {
+            return bytes / (1024 * 1024 * 1024) + " GB";
+        } else {
+            return bytes / (1024L * 1024 * 1024 * 1024) + " TB";
+        }
     }
 
 }
