@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.core.ApexPermission;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,6 +42,11 @@ public class ApexChatListener implements Listener {
         }
 
         toRemove.forEach(event.getRecipients()::remove);
+
+        String message = event.getMessage();
+        if (!message.startsWith(">")) return;
+        
+        event.setMessage(ChatColor.GREEN + message);
     }
 
 }
