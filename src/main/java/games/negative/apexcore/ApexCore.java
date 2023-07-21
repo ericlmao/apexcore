@@ -10,6 +10,7 @@ import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.Placeholder;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
 import games.negative.apexcore.listener.ApexChatListener;
+import games.negative.apexcore.listener.ApexDeathListener;
 import games.negative.apexcore.listener.ApexProfileListener;
 import games.negative.apexcore.placeholder.UniqueIDPlaceholder;
 import games.negative.apexcore.task.TicksPerSecondTask;
@@ -45,7 +46,8 @@ public final class ApexCore extends AluminaPlugin {
     private void handleListeners() {
         registerListeners(
                 new ApexProfileListener(this),
-                new ApexChatListener(api)
+                new ApexChatListener(api),
+                new ApexDeathListener()
         );
     }
 
@@ -136,6 +138,7 @@ public final class ApexCore extends AluminaPlugin {
         // Register /datejoin command
         registerCommand(new CommandBuilder(new CommandDateJoin(api))
                 .name("datejoin")
+                .aliases("joindate")
                 .description("Check when you first joined the server.")
                 .playerOnly()
         );
