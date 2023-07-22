@@ -19,6 +19,6 @@ public class UniqueIDPlaceholder implements ApexPlaceholder {
     @Override
     public @Nullable String handle(@NotNull Player player, @NotNull String[] params) {
         ApexPlayer user = api.getPlayer(player.getUniqueId());
-        return (user != null ? NumberUtil.parse(user.getID()) : null);
+        return (user != null ? NumberUtil.decimalFormat(user.getID()) : null);
     }
 }

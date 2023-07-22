@@ -50,7 +50,7 @@ public class CommandInfo implements Command {
         Locale.SERVER_INFO.replace("%server_start%", start)
                 .replace("%uptime%", uptime)
                 .replace("%tps%", tps)
-                .replace("%unique%", NumberUtil.parse(unique))
+                .replace("%unique%", NumberUtil.decimalFormat(unique))
                 .replace("%size%", parsed)
                 .send(player);
     }
