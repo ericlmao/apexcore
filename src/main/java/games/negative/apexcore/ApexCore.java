@@ -47,7 +47,7 @@ public final class ApexCore extends AluminaPlugin {
         registerListeners(
                 new ApexProfileListener(this),
                 new ApexChatListener(api),
-                new ApexDeathListener()
+                new ApexDeathListener(this)
         );
     }
 
