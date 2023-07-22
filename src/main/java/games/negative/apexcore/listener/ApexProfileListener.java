@@ -34,7 +34,7 @@ public class ApexProfileListener implements Listener {
     public void onAsyncJoin(AsyncPlayerPreLoginEvent event) {
         UUID uuid = event.getUniqueId();
 
-        new DelayedProfileInitTask(api, uuid).runTaskLater(plugin, 1L);
+        new DelayedProfileInitTask(event, api, uuid).runTaskLater(plugin, 1L);
     }
 
     @EventHandler

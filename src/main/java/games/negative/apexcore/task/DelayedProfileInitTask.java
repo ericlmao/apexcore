@@ -4,6 +4,7 @@ import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.event.UniquePlayerJoinEvent;
 import games.negative.apexcore.api.model.ApexPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,14 +14,19 @@ public class DelayedProfileInitTask extends BukkitRunnable {
 
     private final ApexAPI api;
     private final UUID uuid;
+    private final AsyncPlayerPreLoginEvent event;
 
-    public DelayedProfileInitTask(@NotNull ApexAPI api, @NotNull UUID uuid) {
+    public DelayedProfileInitTask(AsyncPlayerPreLoginEvent event, @NotNull ApexAPI api, @NotNull UUID uuid) {
         this.api = api;
         this.uuid = uuid;
+        this.event = event;
     }
 
     @Override
     public void run() {
+        AsyncPlayerPreLoginEvent.Result result = event.getLoginResult();
+        if (result != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
+
         boolean success = api.createPlayer(uuid);
         if (!success) return;
 
