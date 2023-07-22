@@ -19,6 +19,8 @@ public class ApexPlaceholderManagerProvider extends PlaceholderExpansion impleme
     public ApexPlaceholderManagerProvider(@NotNull ApexCore plugin) {
         this.plugin = plugin;
         this.placeholders = Maps.newHashMap();
+
+        register();
     }
 
     @Override
