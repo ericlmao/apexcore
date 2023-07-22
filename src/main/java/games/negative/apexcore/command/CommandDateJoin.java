@@ -6,6 +6,8 @@ import games.negative.alumina.util.TimeUtil;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.core.Locale;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +30,19 @@ public class CommandDateJoin implements Command {
         assert player != null;
 
         ApexPlayer user = api.getPlayer(player.getUniqueId());
+
+        String[] args = context.args();
+        if (args.length > 0) {
+            OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+            ApexPlayer temp = api.getPlayer(target.getUniqueId());
+            if (temp == null) {
+                Locale.GENERIC_PROFILE_ERROR_OTHER.send(player);
+                return;
+            }
+
+            user = temp;
+        }
+
         if (user == null) {
             Locale.GENERIC_PROFILE_ERROR.send(player);
             return;

@@ -66,7 +66,7 @@ public enum Locale {
 
     LAST_SEEN("&7%player% &8- &7Last seen: &f%date%"),
 
-    FIRST_SEEN("&aYou have first joined the server: &f%date% &7(%ago%)"),
+    FIRST_SEEN("&e%player% &ahas first joined the server: &f%date% &7(%ago% ago)"),
 
     SERVER_INFO(
             "&8&m----------------------------------------",
