@@ -1,11 +1,15 @@
 package games.negative.apexcore.listener;
 
 import games.negative.alumina.util.ColorUtil;
+import games.negative.alumina.util.NumberUtil;
 import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.ApexAPI;
+import games.negative.apexcore.api.event.UniquePlayerJoinEvent;
 import games.negative.apexcore.api.model.ApexPlayer;
+import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.Placeholder;
 import games.negative.apexcore.task.DelayedProfileInitTask;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -63,5 +67,23 @@ public class ApexProfileListener implements Listener {
         if (user == null) return;
 
         user.setLastSeenDate(System.currentTimeMillis());
+    }
+
+    @EventHandler
+    public void onUniqueJoin(UniquePlayerJoinEvent event) {
+        UUID uuid = event.getUniqueID();
+        Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return;
+
+        ApexPlayer user = api.getPlayer(uuid);
+        if (user == null) return;
+
+        int id = user.getID();
+        String fancy = NumberUtil.fancy(id);
+
+        Locale.FIRST_JOIN.replace("%player%", player.getName())
+                .replace("%id%", NumberUtil.decimalFormat(id)).broadcast();
+
+        Locale.FIRST_JOIN_PERSONALIZED.replace("%id-fancy%", fancy).send(player);
     }
 }

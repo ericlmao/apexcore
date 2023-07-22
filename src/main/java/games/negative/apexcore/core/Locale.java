@@ -81,6 +81,9 @@ public enum Locale {
             "&7World Size: &f%size%",
             "&8&m----------------------------------------"
     ),
+
+    FIRST_JOIN("&aWelcome %player% to the server! &7(#%id%)"),
+    FIRST_JOIN_PERSONALIZED("&7&o(You are the %id-fancy% player to join the server!)"),
     ;
 
     private final String[] defMessage;
