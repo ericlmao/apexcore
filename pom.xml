@@ -111,7 +111,7 @@
         <dependency>
             <groupId>games.negative.alumina</groupId>
             <artifactId>alumina</artifactId>
-            <version>1.0.0-SNAPSHOT.11</version>
+            <version>1.0.0-SNAPSHOT.13</version>
             <scope>compile</scope>
         </dependency>
 
