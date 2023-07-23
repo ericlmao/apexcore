@@ -2,6 +2,7 @@ package games.negative.apexcore.command;
 
 import games.negative.alumina.command.Command;
 import games.negative.alumina.command.Context;
+import games.negative.alumina.util.NumberUtil;
 import games.negative.alumina.util.TimeUtil;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
@@ -50,7 +51,7 @@ public class CommandDateJoin implements Command {
             Locale.GENERIC_PROFILE_ERROR.send(player);
             return;
         }
-
+        int id = user.getID();
         long date = user.getFirstSeenDate();
         long ago = Math.abs(System.currentTimeMillis() - date);
         String agoFormat = TimeUtil.format(ago, true);
@@ -59,7 +60,8 @@ public class CommandDateJoin implements Command {
         String formattedDate = dateFormat.format(date);
 
         Locale.FIRST_SEEN.replace("%player%", name).replace("%date%", formattedDate)
-                .replace("%ago%", agoFormat).send(player);
+                .replace("%ago%", agoFormat)
+                .replace("%id%", NumberUtil.decimalFormat(id)).send(player);
     }
 
 }
