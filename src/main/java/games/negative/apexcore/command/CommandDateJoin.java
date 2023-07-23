@@ -31,6 +31,8 @@ public class CommandDateJoin implements Command {
 
         ApexPlayer user = api.getPlayer(player.getUniqueId());
 
+        String name = player.getName();
+
         String[] args = context.args();
         if (args.length > 0) {
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
@@ -41,6 +43,7 @@ public class CommandDateJoin implements Command {
             }
 
             user = temp;
+            name = target.getName();
         }
 
         if (user == null) {
@@ -55,7 +58,7 @@ public class CommandDateJoin implements Command {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         String formattedDate = dateFormat.format(date);
 
-        Locale.FIRST_SEEN.replace("%date%", formattedDate)
+        Locale.FIRST_SEEN.replace("%player%", name).replace("%date%", formattedDate)
                 .replace("%ago%", agoFormat).send(player);
     }
 
