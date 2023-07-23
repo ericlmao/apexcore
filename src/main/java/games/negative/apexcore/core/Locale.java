@@ -112,6 +112,7 @@ public enum Locale {
 
         for (Locale entry : values()) {
             entry.message = Message.of(config.getStringList(entry.name()));
+            entry.message.parsePlaceholderAPI();
         }
     }
 
