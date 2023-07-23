@@ -51,6 +51,18 @@ public class ApexProfileListener implements Listener {
         if (user == null) return;
 
         user.setLastSeenDate(System.currentTimeMillis());
+
+        if (!player.hasPlayedBefore()) handleFirstJoin(player, user);
+    }
+
+    private void handleFirstJoin(@NotNull Player player, @NotNull ApexPlayer user) {
+        int id = user.getID();
+        String fancy = NumberUtil.fancy(id);
+
+        Locale.FIRST_JOIN.replace("%player%", player.getName())
+                .replace("%id%", NumberUtil.decimalFormat(id)).broadcast();
+
+        Locale.FIRST_JOIN_PERSONALIZED.replace("%id-fancy%", fancy).send(player);
     }
 
     @EventHandler
@@ -67,23 +79,5 @@ public class ApexProfileListener implements Listener {
         if (user == null) return;
 
         user.setLastSeenDate(System.currentTimeMillis());
-    }
-
-    @EventHandler
-    public void onUniqueJoin(UniquePlayerJoinEvent event) {
-        UUID uuid = event.getUniqueID();
-        Player player = Bukkit.getPlayer(uuid);
-        if (player == null) return;
-
-        ApexPlayer user = api.getPlayer(uuid);
-        if (user == null) return;
-
-        int id = user.getID();
-        String fancy = NumberUtil.fancy(id);
-
-        Locale.FIRST_JOIN.replace("%player%", player.getName())
-                .replace("%id%", NumberUtil.decimalFormat(id)).broadcast();
-
-        Locale.FIRST_JOIN_PERSONALIZED.replace("%id-fancy%", fancy).send(player);
     }
 }
