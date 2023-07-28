@@ -89,15 +89,13 @@ public class CommandReply implements Command {
 
         message = message.replaceAll("&([0-9a-fk-or])", "");
 
-        String username = user.getNameColor() + target.getName();
-
         Locale.MESSAGE_SENDER
-                .replace("%player%", username)
+                .replace("%player%", target.getName())
                 .replace("%message%", message)
                 .send(player);
 
         Locale.MESSAGE_RECEIVER
-                .replace("%player%", profile.getNameColor() + player.getName())
+                .replace("%player%", player.getName())
                 .replace("%message%", message)
                 .send(target);
 

@@ -14,11 +14,6 @@ import java.util.UUID;
 public interface ApexPlayer {
 
     /**
-     * The default name color.
-     */
-    ChatColor DEFAULT_NAME_COLOR = ChatColor.GREEN;
-
-    /**
      * The default message sound.
      */
     Sound DEFAULT_MESSAGE_SOUND = Sound.ENTITY_ARROW_HIT_PLAYER;
@@ -93,19 +88,6 @@ public interface ApexPlayer {
     default boolean isIgnoring(@NotNull UUID uuid) {
         return getIgnoredUsers().contains(uuid);
     }
-
-    /**
-     * Get the player's name color.
-     * @return The player's name color.
-     */
-    @NotNull
-    ChatColor getNameColor();
-
-    /**
-     * Set the player's name color.
-     * @param color The player's name color.
-     */
-    void setNameColor(@Nullable ChatColor color);
 
     /**
      * Get the player's message sound.

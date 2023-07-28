@@ -59,9 +59,6 @@ public class ApexPlayerImpl implements ApexPlayer {
     @SerializedName("ignored-users")
     private final List<UUID> ignoredUsers;
 
-    @SerializedName("name-color")
-    private ChatColor nameColor = DEFAULT_NAME_COLOR;
-
     @SerializedName("message-sound-type")
     private Sound messageSound = DEFAULT_MESSAGE_SOUND;
 
@@ -143,16 +140,6 @@ public class ApexPlayerImpl implements ApexPlayer {
     @Override
     public void removeIgnoredUser(@NotNull UUID uuid) {
         ignoredUsers.remove(uuid);
-    }
-
-    @Override
-    public @NotNull ChatColor getNameColor() {
-        return nameColor;
-    }
-
-    @Override
-    public void setNameColor(@Nullable ChatColor color) {
-        this.nameColor = (color == null ? DEFAULT_NAME_COLOR : color);
     }
 
     @Override
