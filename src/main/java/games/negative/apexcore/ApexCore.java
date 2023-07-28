@@ -95,7 +95,7 @@ public final class ApexCore extends AluminaPlugin {
         // Register the /message command
         registerCommand(new CommandBuilder(new CommandMessage(api))
                 .name("message")
-                .aliases("msg", "m", "tell", "whisper", "w")
+                .aliases("msg", "m", "tell", "whisper", "w", "pm")
                 .description("Send a private message to a player.")
                 .params("player", "message")
                 .playerOnly()
