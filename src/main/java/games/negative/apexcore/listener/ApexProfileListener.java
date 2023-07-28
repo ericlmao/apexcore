@@ -12,6 +12,7 @@ import games.negative.apexcore.task.DelayedProfileInitTask;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -30,11 +31,16 @@ public class ApexProfileListener implements Listener {
         this.api = plugin.api();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncJoin(AsyncPlayerPreLoginEvent event) {
         UUID uuid = event.getUniqueId();
 
-        new DelayedProfileInitTask(event, api, uuid).runTaskLater(plugin, 1L);
+        if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
+
+        boolean whitelisted = Bukkit.getWhitelistedPlayers().stream().anyMatch(player -> player.getUniqueId().equals(uuid));
+        if (!whitelisted) return;
+
+        new DelayedProfileInitTask(api, uuid).runTaskLater(plugin, 1L);
     }
 
     @EventHandler

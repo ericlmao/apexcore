@@ -14,19 +14,14 @@ public class DelayedProfileInitTask extends BukkitRunnable {
 
     private final ApexAPI api;
     private final UUID uuid;
-    private final AsyncPlayerPreLoginEvent event;
 
-    public DelayedProfileInitTask(AsyncPlayerPreLoginEvent event, @NotNull ApexAPI api, @NotNull UUID uuid) {
+    public DelayedProfileInitTask(@NotNull ApexAPI api, @NotNull UUID uuid) {
         this.api = api;
         this.uuid = uuid;
-        this.event = event;
     }
 
     @Override
     public void run() {
-        AsyncPlayerPreLoginEvent.Result result = event.getLoginResult();
-        if (result != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
-
         boolean success = api.createPlayer(uuid);
         if (!success) return;
 
