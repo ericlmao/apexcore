@@ -4,6 +4,7 @@ import games.negative.alumina.command.Command;
 import games.negative.alumina.command.Context;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
+import games.negative.apexcore.api.model.Conversation;
 import games.negative.apexcore.core.ApexPermission;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.util.TextUtil;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 public class CommandMessage implements Command {
 
@@ -26,7 +28,8 @@ public class CommandMessage implements Command {
         Player sender = context.getPlayer();
         assert sender != null;
 
-        ApexPlayer profile = api.getPlayer(sender.getUniqueId());
+        UUID uuid = sender.getUniqueId();
+        ApexPlayer profile = api.getPlayer(uuid);
         if (profile == null) {
             Locale.GENERIC_PROFILE_ERROR.send(sender);
             return;
@@ -40,7 +43,8 @@ public class CommandMessage implements Command {
             return;
         }
 
-        ApexPlayer recipient = api.getPlayer(target.getUniqueId());
+        UUID recipientUUID = target.getUniqueId();
+        ApexPlayer recipient = api.getPlayer(recipientUUID);
         if (recipient == null) {
             Locale.GENERIC_PLAYER_NOT_FOUND.replace("%player%", args[0]).send(sender);
             return;
@@ -55,13 +59,13 @@ public class CommandMessage implements Command {
         }
 
         // SENDER is ignoring RECEIVER
-        if (profile.isIgnoring(target.getUniqueId())) {
+        if (profile.isIgnoring(recipientUUID)) {
             Locale.MESSAGE_CANNOT_SEND_IGNORING.replace("%player%", target.getName()).send(sender);
             return;
         }
 
         // RECEIVER is ignoring SENDER
-        if (recipient.isIgnoring(sender.getUniqueId())) {
+        if (recipient.isIgnoring(uuid)) {
             Locale.MESSAGE_CANNOT_SEND_IGNORED.replace("%player%", target.getName()).send(sender);
             return;
         }
@@ -79,6 +83,7 @@ public class CommandMessage implements Command {
             target.playSound(target.getLocation(), recipient.getMessageSound(), 1, 1);
         }
 
-        api.addConversation(sender.getUniqueId(), target.getUniqueId());
+        api.updateConversation(uuid, recipientUUID);
+        api.updateConversation(recipientUUID, uuid);
     }
 }

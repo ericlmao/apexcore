@@ -6,7 +6,9 @@ import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.ApexDataManager;
 import games.negative.apexcore.api.ApexPlaceholderManager;
 import games.negative.apexcore.api.model.ApexPlayer;
+import games.negative.apexcore.api.model.Conversation;
 import games.negative.apexcore.core.structure.ApexPlayerImpl;
+import games.negative.apexcore.task.ConversationExpireTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +20,7 @@ public class ApexAPIProvider implements ApexAPI {
     private final Map<UUID, ApexPlayer> players;
     private final ApexDataManager data;
     private final ApexPlaceholderManager placeholderManager;
-    private final Map<UUID, UUID> conversations;
+    private final Map<UUID, Conversation> conversations;
 
     public ApexAPIProvider(@NotNull ApexCore plugin) {
         this.data = new ApexDataManagerProvider(plugin);
@@ -28,6 +30,8 @@ public class ApexAPIProvider implements ApexAPI {
         plugin.getLogger().info("Loaded " + players.size() + " players from data folder!");
 
         this.conversations = Maps.newHashMap();
+
+        new ConversationExpireTask(this).runTaskTimer(plugin, 0L, 20L);
     }
 
     @Override
@@ -70,14 +74,14 @@ public class ApexAPIProvider implements ApexAPI {
     }
 
     @Override
-    public Map<UUID, UUID> conversations() {
+    public Map<UUID, Conversation> conversations() {
         return conversations;
     }
 
     @Override
     public void addConversation(@NotNull UUID player, @NotNull UUID recipient) {
         this.conversations.remove(player);
-        this.conversations.put(player, recipient);
+        this.conversations.put(player, new Conversation(recipient, System.currentTimeMillis()));
     }
 
     @Override
@@ -91,7 +95,20 @@ public class ApexAPIProvider implements ApexAPI {
     }
 
     @Override
-    public @Nullable UUID getConversation(@NotNull UUID player) {
+    public void updateConversation(@NotNull UUID uuid, @NotNull UUID recipient) {
+        if (!this.conversations.containsKey(uuid)) {
+            addConversation(uuid, recipient);
+            return;
+        }
+
+        Conversation current = getConversation(uuid);
+        if (current == null || !current.recipient().equals(recipient)) return;
+
+        this.conversations.replace(uuid, new Conversation(recipient, System.currentTimeMillis()));
+    }
+
+    @Override
+    public @Nullable Conversation getConversation(@NotNull UUID player) {
         return this.conversations.getOrDefault(player, null);
     }
 

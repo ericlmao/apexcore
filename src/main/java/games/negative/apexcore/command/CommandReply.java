@@ -4,6 +4,7 @@ import games.negative.alumina.command.Command;
 import games.negative.alumina.command.Context;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
+import games.negative.apexcore.api.model.Conversation;
 import games.negative.apexcore.core.ApexPermission;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.util.TextUtil;
@@ -39,9 +40,10 @@ public class CommandReply implements Command {
             return;
         }
 
-        UUID recipient = api.getConversation(uuid);
-        assert recipient != null;
+        Conversation conversation = api.getConversation(uuid);
+        if (conversation == null) return;
 
+        UUID recipient = conversation.recipient();
         Player target = Bukkit.getPlayer(recipient);
         if (target == null) {
             Locale.GENERIC_PLAYER_NOT_FOUND
@@ -67,18 +69,21 @@ public class CommandReply implements Command {
         // SENDER is ignoring RECEIVER
         if (profile.isIgnoring(target.getUniqueId())) {
             Locale.MESSAGE_CANNOT_SEND_IGNORING.replace("%player%", target.getName()).send(player);
+            api.removeConversation(uuid);
             return;
         }
 
         // RECEIVER is ignoring SENDER
         if (user.isIgnoring(uuid)) {
             Locale.MESSAGE_CANNOT_SEND_IGNORED.replace("%player%", target.getName()).send(player);
+            api.removeConversation(uuid);
             return;
         }
 
         // RECEIVER has messages disabled and SENDER does not have bypass permission
         if (!user.isMessageable() && !player.hasPermission(ApexPermission.MESSAGE_BYPASS)) {
             Locale.MESSAGE_CANNOT_SEND_DISABLED.replace("%player%", target.getName()).send(player);
+            api.removeConversation(uuid);
             return;
         }
 
@@ -100,6 +105,8 @@ public class CommandReply implements Command {
             target.playSound(target.getLocation(), user.getMessageSound(), 1, 1);
         }
 
+        api.updateConversation(uuid, recipient);
+        api.updateConversation(recipient, uuid);
     }
 
 }

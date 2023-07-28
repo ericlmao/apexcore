@@ -1,6 +1,7 @@
 package games.negative.apexcore.api;
 
 import games.negative.apexcore.api.model.ApexPlayer;
+import games.negative.apexcore.api.model.Conversation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +51,7 @@ public interface ApexAPI {
      * Get the map of message conversations.
      * @return The map of message conversations.
      */
-    Map<UUID, UUID> conversations();
+    Map<UUID, Conversation> conversations();
 
     /**
      * Add a new conversation entry.
@@ -73,12 +74,19 @@ public interface ApexAPI {
     boolean hasConversation(@NotNull UUID player);
 
     /**
+     * Update a conversation.
+     * @param uuid The player
+     * @param recipient The recipient
+     */
+    void updateConversation(@NotNull UUID uuid, @NotNull UUID recipient);
+
+    /**
      * Get the conversation of a player.
      * @param player The player
      * @return The conversation of the player.
      */
     @Nullable
-    UUID getConversation(@NotNull UUID player);
+    Conversation getConversation(@NotNull UUID player);
 
     /**
      * Get the placeholder manager.
