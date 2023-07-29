@@ -38,7 +38,7 @@ public class CommandSeen implements Command {
         long seen = Math.abs(System.currentTimeMillis() - date);
         String formatted = TimeUtil.format(seen, false);
 
-        Locale.LAST_SEEN.replace("%player%", player.getName())
+        Locale.LAST_SEEN.replace("%player%", target.getName())
                 .replace("%date%", formatted).send(player);
     }
 
