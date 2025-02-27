@@ -26,16 +26,13 @@ public class ApexDeathListener implements Listener {
         Player killer = victim.getKiller();
         if (killer == null) return;
 
-        ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD);
-        builder.setName("&e" + victim.getName() + "'s Head");
-        builder.addLoreLine("&7&oKilled by &c&o" + killer.getName());
-        builder.setSkullOwner(victim);
-        builder.applyPersistentData(data -> {
-            data.set(killerKey, PersistentDataType.STRING, killer.getUniqueId().toString());
-        });
+        ItemStack stack = new ItemBuilder(Material.PLAYER_HEAD)
+                .setName("<yellow>" + victim.getName() + "'s Head")
+                .addLoreLine("<gray>Killed by <red>" + killer.getName())
+                .setSkullOwner(victim.getPlayerProfile())
+                .applyPersistentData(data -> data.set(killerKey, PersistentDataType.STRING, killer.getUniqueId().toString()))
+                .build();
 
-        ItemStack skull = builder.build();
-
-        event.getDrops().add(skull);
+        event.getDrops().add(stack);
     }
 }

@@ -1,14 +1,14 @@
 package games.negative.apexcore.listener;
 
-import games.negative.alumina.util.ColorUtil;
+import games.negative.alumina.message.Message;
 import games.negative.alumina.util.NumberUtil;
 import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.ApexAPI;
-import games.negative.apexcore.api.event.UniquePlayerJoinEvent;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.Placeholder;
 import games.negative.apexcore.task.DelayedProfileInitTask;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,10 +48,10 @@ public class ApexProfileListener implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        String join = Placeholder.JOIN.toString();
-        join = join.replace("%player%", player.getName());
+        Message message = new Message(Placeholder.JOIN.toString());
 
-        event.setJoinMessage(ColorUtil.translate(join));
+        Component component = message.create().replace("%player%", player.getName()).asComponent(player);
+        event.joinMessage(component);
 
         ApexPlayer user = api.getPlayer(uuid);
         if (user == null) return;
@@ -65,10 +65,13 @@ public class ApexProfileListener implements Listener {
         int id = user.getID();
         String fancy = NumberUtil.fancy(id);
 
-        Locale.FIRST_JOIN.replace("%player%", player.getName())
-                .replace("%id%", NumberUtil.decimalFormat(id)).broadcast();
+        Component component = Locale.FIRST_JOIN.create().replace("%player%", player.getName())
+                .replace("%id%", NumberUtil.decimalFormat(id))
+                .asComponent(player);
 
-        Locale.FIRST_JOIN_PERSONALIZED.replace("%id-fancy%", fancy).send(player);
+        Bukkit.broadcast(component);
+
+        Locale.FIRST_JOIN_PERSONALIZED.create().replace("%id-fancy%", fancy).send(player);
     }
 
     @EventHandler
@@ -76,10 +79,10 @@ public class ApexProfileListener implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        String quit = Placeholder.QUIT.toString();
-        quit = quit.replace("%player%", player.getName());
+        Message message = new Message(Placeholder.QUIT.toString());
 
-        event.setQuitMessage(ColorUtil.translate(quit));
+        Component component = message.create().replace("%player%", player.getName()).asComponent(player);
+        event.quitMessage(component);
 
         ApexPlayer user = api.getPlayer(uuid);
         if (user == null) return;

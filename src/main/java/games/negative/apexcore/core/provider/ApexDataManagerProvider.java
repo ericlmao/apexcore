@@ -7,6 +7,8 @@ import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.ApexDataManager;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.core.structure.ApexPlayerImpl;
+import games.negative.apexcore.json.SoundTypeAdapter;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -16,6 +18,8 @@ import java.util.UUID;
 public class ApexDataManagerProvider implements ApexDataManager {
 
     private final ApexCore plugin;
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+            .registerTypeAdapter(Sound.class, new SoundTypeAdapter()).serializeNulls().create();
 
     public ApexDataManagerProvider(@NotNull ApexCore plugin) {
         this.plugin = plugin;

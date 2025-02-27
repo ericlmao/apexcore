@@ -1,138 +1,89 @@
 package games.negative.apexcore.ui;
 
 import com.google.common.collect.Lists;
-import games.negative.alumina.menu.ChestMenu;
-import games.negative.alumina.menu.base.MenuItem;
-import games.negative.alumina.menu.filler.FillerItem;
+import games.negative.alumina.builder.ItemBuilder;
+import games.negative.alumina.menu.MenuButton;
+import games.negative.alumina.menu.PaginatedMenu;
+import games.negative.alumina.util.IntList;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.core.Locale;
-import org.bukkit.*;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public class IgnoreListMenu extends ChestMenu {
+public class IgnoreListMenu extends PaginatedMenu {
 
-    private final ApexAPI api;
-    private final int page;
     private final ApexPlayer user;
 
-    public IgnoreListMenu(@NotNull ApexAPI api, @NotNull ApexPlayer user, int page) {
+    public IgnoreListMenu(@NotNull ApexPlayer user) {
         super("Your Ignored Players", 6);
 
-        this.api = api;
-        this.page = page;
         this.user = user;
 
         List<Integer> fillerSlots = Lists.newArrayList(0, 1, 2, 3, 4, 5, 6, 7, 8, 45, 46, 47, 48, 49, 50, 51, 52, 53);
-        fillerSlots.forEach(index -> setItem(index, FillerItem.BLACK));
+        fillerSlots.forEach(index -> addButton(MenuButton.builder().item(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setName(" ").build()).build()));
 
-        int limit = Math.abs(fillerSlots.size() - (9 * 6));
+        setPaginatedSlots(IntList.getList(List.of("9-44")));
 
-        List<UUID> ignored = user.getIgnoredUsers();
-        List<UUID> sorted = ignored.stream().skip((long) (page - 1) * limit).limit(limit).toList();
-        for (UUID uuid : sorted) {
-            // todo Convert to ItemBuilder later
-            ItemStack display = new ItemStack(Material.PLAYER_HEAD);
-            ItemMeta meta = display.getItemMeta();
-            if (meta == null) continue;
+        List<OfflinePlayer> ignored = user.getIgnoredUsers().stream().map(Bukkit::getOfflinePlayer).toList();
 
-            OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        Collection<MenuButton> buttons = generatePaginatedButtons(ignored, player -> {
+            ItemStack stack = new ItemBuilder(Material.PLAYER_HEAD)
+                    .setSkullOwner(player.getPlayerProfile())
+                    .setName("<yellow>" + player.getName())
+                    .addLoreLine("<gray>Click to unignore this player.")
+                    .build();
 
-            meta.setDisplayName(ChatColor.YELLOW + player.getName());
-            meta.setLore(List.of(ChatColor.GRAY + "Click to unignore this player."));
+            return MenuButton.builder().item(stack).action(new RemoveIgnoreUserClickAction(player.getUniqueId())).build();
+        });
 
-            if (meta instanceof SkullMeta skull)
-                skull.setOwningPlayer(player);
+        setPaginatedButtons(buttons);
 
-            display.setItemMeta(meta);
+        setPreviousPageButton(
+                MenuButton.builder().item(new ItemBuilder(Material.ARROW)
+                .setName("<red>Previous Page").build())
+                .action((menuButton, player, inventoryClickEvent) -> changePage(player, page - 1)).build()
+        );
 
-            addItem(display, "head");
-        }
-
-        if (page > 1) {
-            ItemStack previous = new ItemStack(Material.ARROW);
-            ItemMeta meta = previous.getItemMeta();
-            if (meta == null) return;
-
-            meta.setDisplayName(ChatColor.RED + "Previous Page");
-
-            previous.setItemMeta(meta);
-
-            setItem(45, previous, "previous-page");
-        }
-
-        if (ignored.size() > page * limit) {
-            ItemStack next = new ItemStack(Material.ARROW);
-            ItemMeta meta = next.getItemMeta();
-            if (meta == null) return;
-
-            meta.setDisplayName(ChatColor.GREEN + "Next Page");
-
-            next.setItemMeta(meta);
-
-            setItem(53, next, "next-page");
-        }
-    }
-
-    @Override
-    public void onClick(@NotNull Player player, @NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
-    }
-
-    @Override
-    public void onFunctionClick(@NotNull Player player, @NotNull MenuItem item, @NotNull InventoryClickEvent event) {
-        String key = item.key();
-        if (key == null) return;
-
-        switch (key.toLowerCase()) {
-            case "next-page" -> handleNextPage(player);
-            case "previous-page" -> handlePreviousPage(player);
-            case "head" -> handleHead(player, item);
-        }
-
-        event.setCancelled(true);
-        event.setCurrentItem(null);
-        player.updateInventory();
+        setNextPageButton(
+                MenuButton.builder().item(new ItemBuilder(Material.ARROW)
+                .setName("<green>Next Page").build())
+                .action((menuButton, player, inventoryClickEvent) -> changePage(player, page + 1)).build()
+        );
 
     }
 
-    private void handleHead(@NotNull Player player, @NotNull MenuItem item) {
-        ItemStack itemStack = item.item();
-        if (itemStack.getType() != Material.PLAYER_HEAD) return;
-        if (!(itemStack.getItemMeta() instanceof SkullMeta meta)) return;
+    @RequiredArgsConstructor
+    private class RemoveIgnoreUserClickAction implements MenuButton.ClickAction {
+        private final UUID uuid;
 
-        OfflinePlayer target = meta.getOwningPlayer();
-        if (target == null) {
-            Locale.GENERIC_PROFILE_ERROR_OTHER.send(player);
-            return;
+        @Override
+        public void onClick(@NotNull MenuButton button, @NotNull Player player, @NotNull InventoryClickEvent event) {
+            OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
+
+            if (!user.isIgnoring(uuid)) {
+                Locale.IGNORE_NOT_IGNORING.create().replace("%player%", target.getName()).send(player);
+                return;
+            }
+
+            user.removeIgnoredUser(uuid);
+            Locale.IGNORE_REMOVE_SINGLE.create().replace("%player%", target.getName()).send(player);
+
+            player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
+
+            refresh(player);
         }
-
-        UUID uuid = target.getUniqueId();
-        if (!user.isIgnoring(uuid)) {
-            Locale.IGNORE_NOT_IGNORING.replace("%player%", target.getName()).send(player);
-            return;
-        }
-
-        user.removeIgnoredUser(uuid);
-        Locale.IGNORE_REMOVE_SINGLE.replace("%player%", target.getName()).send(player);
-
-        player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
-        player.closeInventory();
     }
 
-    private void handlePreviousPage(@NotNull Player player) {
-        new IgnoreListMenu(api, user, page - 1).open(player);
-    }
-
-    private void handleNextPage(@NotNull Player player) {
-        new IgnoreListMenu(api, user, page + 1).open(player);
-    }
 }

@@ -2,6 +2,7 @@ package games.negative.apexcore.core;
 
 import games.negative.alumina.message.Message;
 import games.negative.apexcore.ApexCore;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -111,8 +112,7 @@ public enum Locale {
         if (changed) saveFile(plugin, file, config);
 
         for (Locale entry : values()) {
-            entry.message = Message.of(config.getStringList(entry.name()));
-            entry.message.parsePlaceholderAPI();
+            entry.message = new Message(String.join("<newline>", entry.defMessage));
         }
     }
 
@@ -140,16 +140,9 @@ public enum Locale {
         }
     }
 
-
-    public void send(CommandSender sender) {
-        message.send(sender);
+    @NotNull
+    public Message.Builder create() {
+        return message.create();
     }
 
-    public void broadcast() {
-        message.broadcast();
-    }
-
-    public Message replace(String placeholder, String replacement) {
-        return message.replace(placeholder, replacement);
-    }
 }

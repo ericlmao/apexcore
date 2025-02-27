@@ -1,7 +1,8 @@
 package games.negative.apexcore.command;
 
 import games.negative.alumina.command.Command;
-import games.negative.alumina.command.Context;
+import games.negative.alumina.command.CommandContext;
+import games.negative.alumina.command.builder.CommandBuilder;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.api.model.Conversation;
@@ -14,29 +15,35 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class CommandReply implements Command {
+public class CommandReply extends Command {
 
     private final ApexAPI api;
 
     public CommandReply(@NotNull ApexAPI api) {
+        super(CommandBuilder.builder()
+                .name("reply")
+                .aliases("r")
+                .description("Reply to a private message.")
+                .parameter("message")
+                .playerOnly(true)
+        );
         this.api = api;
     }
 
     @Override
-    public void execute(@NotNull Context context) {
-        Player player = context.getPlayer();
-        assert player != null;
+    public void execute(@NotNull CommandContext context) {
+        Player player = context.player().orElseThrow();
 
         UUID uuid = player.getUniqueId();
 
         ApexPlayer profile = api.getPlayer(uuid);
         if (profile == null) {
-            Locale.GENERIC_PROFILE_ERROR.send(player);
+            Locale.GENERIC_PROFILE_ERROR.create().send(player);
             return;
         }
 
         if (!api.hasConversation(uuid)) {
-            Locale.REPLY_CANNOT_SEND.send(player);
+            Locale.REPLY_CANNOT_SEND.create().send(player);
             return;
         }
 
@@ -47,6 +54,7 @@ public class CommandReply implements Command {
         Player target = Bukkit.getPlayer(recipient);
         if (target == null) {
             Locale.GENERIC_PLAYER_NOT_FOUND
+                    .create()
                     .replace("%player%", Bukkit.getOfflinePlayer(recipient).getName())
                     .send(player);
             return;
@@ -54,7 +62,7 @@ public class CommandReply implements Command {
 
         ApexPlayer user = api.getPlayer(recipient);
         if (user == null) {
-            Locale.GENERIC_PROFILE_ERROR_OTHER.send(player);
+            Locale.GENERIC_PROFILE_ERROR_OTHER.create().send(player);
             return;
         }
 
@@ -62,27 +70,27 @@ public class CommandReply implements Command {
 
         String message = TextUtil.combine(args);
         if (message.isEmpty()) {
-            Locale.MESSAGE_NO_MESSAGE.send(player);
+            Locale.MESSAGE_NO_MESSAGE.create().send(player);
             return;
         }
 
         // SENDER is ignoring RECEIVER
         if (profile.isIgnoring(target.getUniqueId())) {
-            Locale.MESSAGE_CANNOT_SEND_IGNORING.replace("%player%", target.getName()).send(player);
+            Locale.MESSAGE_CANNOT_SEND_IGNORING.create().replace("%player%", target.getName()).send(player);
             api.removeConversation(uuid);
             return;
         }
 
         // RECEIVER is ignoring SENDER
         if (user.isIgnoring(uuid)) {
-            Locale.MESSAGE_CANNOT_SEND_IGNORED.replace("%player%", target.getName()).send(player);
+            Locale.MESSAGE_CANNOT_SEND_IGNORED.create().replace("%player%", target.getName()).send(player);
             api.removeConversation(uuid);
             return;
         }
 
         // RECEIVER has messages disabled and SENDER does not have bypass permission
         if (!user.isMessageable() && !player.hasPermission(ApexPermission.MESSAGE_BYPASS)) {
-            Locale.MESSAGE_CANNOT_SEND_DISABLED.replace("%player%", target.getName()).send(player);
+            Locale.MESSAGE_CANNOT_SEND_DISABLED.create().replace("%player%", target.getName()).send(player);
             api.removeConversation(uuid);
             return;
         }
@@ -90,11 +98,13 @@ public class CommandReply implements Command {
         message = message.replaceAll("&([0-9a-fk-or])", "");
 
         Locale.MESSAGE_SENDER
+                .create()
                 .replace("%player%", target.getName())
                 .replace("%message%", message)
                 .send(player);
 
         Locale.MESSAGE_RECEIVER
+                .create()
                 .replace("%player%", player.getName())
                 .replace("%message%", message)
                 .send(target);
