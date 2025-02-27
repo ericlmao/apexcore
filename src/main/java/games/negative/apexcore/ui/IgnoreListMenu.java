@@ -28,11 +28,12 @@ public class IgnoreListMenu extends PaginatedMenu {
 
     public IgnoreListMenu(@NotNull ApexPlayer user) {
         super("Your Ignored Players", 6);
+        setCancelClicks(true);
 
         this.user = user;
 
         List<Integer> fillerSlots = Lists.newArrayList(0, 1, 2, 3, 4, 5, 6, 7, 8, 45, 46, 47, 48, 49, 50, 51, 52, 53);
-        fillerSlots.forEach(index -> addButton(MenuButton.builder().item(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setName(" ").build()).build()));
+        fillerSlots.forEach(index -> addButton(MenuButton.builder().slot(index).item(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setName(" ").build()).build()));
 
         setPaginatedSlots(IntList.getList(List.of("9-44")));
 
@@ -81,8 +82,7 @@ public class IgnoreListMenu extends PaginatedMenu {
             Locale.IGNORE_REMOVE_SINGLE.create().replace("%player%", target.getName()).send(player);
 
             player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
-
-            refresh(player);
+            player.closeInventory();
         }
     }
 

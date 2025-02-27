@@ -2,8 +2,6 @@ package games.negative.apexcore.core;
 
 import games.negative.alumina.message.Message;
 import games.negative.apexcore.ApexCore;
-import net.kyori.adventure.audience.Audience;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -112,7 +110,7 @@ public enum Locale {
         if (changed) saveFile(plugin, file, config);
 
         for (Locale entry : values()) {
-            entry.message = new Message(String.join("<newline>", entry.defMessage));
+            entry.message = new Message(String.join("<newline>", config.getStringList(entry.name())));
         }
     }
 
