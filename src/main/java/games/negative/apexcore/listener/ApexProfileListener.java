@@ -31,14 +31,11 @@ public class ApexProfileListener implements Listener {
         this.api = plugin.api();
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onAsyncJoin(AsyncPlayerPreLoginEvent event) {
         UUID uuid = event.getUniqueId();
 
         if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
-
-        boolean whitelisted = Bukkit.getWhitelistedPlayers().stream().anyMatch(player -> player.getUniqueId().equals(uuid));
-        if (!whitelisted) return;
 
         new DelayedProfileInitTask(api, uuid).runTaskLater(plugin, 1L);
     }

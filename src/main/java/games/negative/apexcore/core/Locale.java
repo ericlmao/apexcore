@@ -110,7 +110,7 @@ public enum Locale {
         if (changed) saveFile(plugin, file, config);
 
         for (Locale entry : values()) {
-            entry.message = new Message(String.join("<newline>", config.getStringList(entry.name())));
+            entry.message = new Message(String.join("<reset><newline>", config.getStringList(entry.name())));
         }
     }
 
