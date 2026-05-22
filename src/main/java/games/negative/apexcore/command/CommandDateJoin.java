@@ -1,7 +1,8 @@
 package games.negative.apexcore.command;
 
 import games.negative.alumina.command.Command;
-import games.negative.alumina.command.Context;
+import games.negative.alumina.command.CommandContext;
+import games.negative.alumina.command.builder.CommandBuilder;
 import games.negative.alumina.util.NumberUtil;
 import games.negative.alumina.util.TimeUtil;
 import games.negative.apexcore.api.ApexAPI;
@@ -13,8 +14,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
-public class CommandDateJoin implements Command {
+public class CommandDateJoin extends Command {
 
     private final ApexAPI api;
 
@@ -22,13 +24,18 @@ public class CommandDateJoin implements Command {
     private static final String DATE_FORMAT = "EEE, MMMM d, yyyy, 'at' hh:mm a";
 
     public CommandDateJoin(@NotNull ApexAPI api) {
+        super(CommandBuilder.builder()
+                .name("datejoin")
+                .aliases("joindate")
+                .description("Check when you first joined the server.")
+                .playerOnly(true)
+        );
         this.api = api;
     }
 
     @Override
-    public void execute(@NotNull Context context) {
-        Player player = context.getPlayer();
-        assert player != null;
+    public void execute(@NotNull CommandContext context) {
+        Player player = context.player().orElseThrow();
 
         ApexPlayer user = api.getPlayer(player.getUniqueId());
 
@@ -39,7 +46,7 @@ public class CommandDateJoin implements Command {
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
             ApexPlayer temp = api.getPlayer(target.getUniqueId());
             if (temp == null) {
-                Locale.GENERIC_PROFILE_ERROR_OTHER.send(player);
+                Locale.GENERIC_PROFILE_ERROR_OTHER.create().send(player);
                 return;
             }
 
@@ -48,7 +55,7 @@ public class CommandDateJoin implements Command {
         }
 
         if (user == null) {
-            Locale.GENERIC_PROFILE_ERROR.send(player);
+            Locale.GENERIC_PROFILE_ERROR.create().send(player);
             return;
         }
         int id = user.getID();
@@ -59,9 +66,12 @@ public class CommandDateJoin implements Command {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         String formattedDate = dateFormat.format(date);
 
-        Locale.FIRST_SEEN.replace("%player%", name).replace("%date%", formattedDate)
+        Locale.FIRST_SEEN.create()
+                .replace("%player%", Objects.requireNonNull(name))
+                .replace("%date%", formattedDate)
                 .replace("%ago%", agoFormat)
-                .replace("%id%", NumberUtil.decimalFormat(id)).send(player);
+                .replace("%id%", NumberUtil.decimalFormat(id))
+                .send(player);
     }
 
 }

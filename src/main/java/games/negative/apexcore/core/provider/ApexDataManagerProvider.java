@@ -7,6 +7,8 @@ import games.negative.apexcore.ApexCore;
 import games.negative.apexcore.api.ApexDataManager;
 import games.negative.apexcore.api.model.ApexPlayer;
 import games.negative.apexcore.core.structure.ApexPlayerImpl;
+import games.negative.apexcore.json.SoundTypeAdapter;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -16,6 +18,8 @@ import java.util.UUID;
 public class ApexDataManagerProvider implements ApexDataManager {
 
     private final ApexCore plugin;
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+            .registerTypeAdapter(Sound.class, new SoundTypeAdapter()).serializeNulls().create();
 
     public ApexDataManagerProvider(@NotNull ApexCore plugin) {
         this.plugin = plugin;
@@ -41,14 +45,12 @@ public class ApexDataManagerProvider implements ApexDataManager {
             return Maps.newHashMap();
         }
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-
         Map<UUID, ApexPlayer> players = Maps.newHashMap();
         for (File file : files) {
             if (!file.getName().endsWith(".json")) continue;
 
             try (Reader reader = new FileReader(file)) {
-                ApexPlayer player = gson.fromJson(reader, ApexPlayerImpl.class);
+                ApexPlayer player = GSON.fromJson(reader, ApexPlayerImpl.class);
                 players.put(player.getUniqueID(), player);
                 plugin.getLogger().info("Loaded player data from file " + file.getName() + "!");
             } catch (Exception e) {
@@ -74,8 +76,6 @@ public class ApexDataManagerProvider implements ApexDataManager {
             if (success) plugin.getLogger().info("Created data folder!");
         }
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-
         for (ApexPlayer player : players.values()) {
             UUID uuid = player.getUniqueID();
 
@@ -91,7 +91,7 @@ public class ApexDataManagerProvider implements ApexDataManager {
             }
 
             try (Writer writer = new FileWriter(file)) {
-                gson.toJson(player, writer);
+                GSON.toJson(player, writer);
                 plugin.getLogger().info("Saved player data to file " + file.getName() + "!");
             } catch (IOException e) {
                 plugin.getLogger().warning("Failed to save player data to file " + file.getName() + "!");

@@ -1,11 +1,10 @@
 package games.negative.apexcore;
 
 import games.negative.alumina.AluminaPlugin;
-import games.negative.alumina.command.builder.CommandBuilder;
 import games.negative.apexcore.api.ApexAPI;
 import games.negative.apexcore.api.ApexPlaceholderManager;
 import games.negative.apexcore.command.*;
-import games.negative.apexcore.command.ignore.*;
+import games.negative.apexcore.command.ignore.CommandIgnore;
 import games.negative.apexcore.core.Locale;
 import games.negative.apexcore.core.Placeholder;
 import games.negative.apexcore.core.provider.ApexAPIProvider;
@@ -21,6 +20,11 @@ public final class ApexCore extends AluminaPlugin {
     private ApexAPI api;
     private long start;
     private TicksPerSecondTask tpsHandler;
+
+    @Override
+    public void load() {
+
+    }
 
     @Override
     public void enable() {
@@ -58,97 +62,28 @@ public final class ApexCore extends AluminaPlugin {
 
     private void handleCommands() {
         // Register the /ignore command
-        registerCommand(
-                new CommandBuilder(new CommandIgnore())
-                        .name("ignore")
-                        .description("Add, remove, or list ignored players.")
-                        .playerOnly()
-                        .subcommands(
-                                // /ignore add <player>
-                                new CommandBuilder(new CmdAdd(api))
-                                        .name("add")
-                                        .description("Add a player to your ignore list.")
-                                        .params("player")
-                                        .playerOnly(),
-
-                                // /ignore remove <player>
-                                new CommandBuilder(new CmdRemove(api))
-                                        .name("remove")
-                                        .description("Remove a player from your ignore list.")
-                                        .params("player")
-                                        .playerOnly(),
-
-                                // /ignore list
-                                new CommandBuilder(new CmdList(api))
-                                        .name("list")
-                                        .description("List all players on your ignore list.")
-                                        .playerOnly(),
-
-                                // ignore clear
-                                new CommandBuilder(new CmdClear(api))
-                                        .name("clear")
-                                        .description("Clear your ignore list.")
-                                        .playerOnly()
-                        )
-        );
+        registerCommand(new CommandIgnore(api));
 
         // Register the /message command
-        registerCommand(new CommandBuilder(new CommandMessage(api))
-                .name("message")
-                .aliases("msg", "m", "tell", "whisper", "w", "pm")
-                .description("Send a private message to a player.")
-                .params("player", "message")
-                .playerOnly()
-        );
+        registerCommand(new CommandMessage(api));
 
         // Register the /reply command
-        registerCommand(new CommandBuilder(new CommandReply(api))
-                .name("reply")
-                .aliases("r")
-                .description("Reply to a private message.")
-                .params("message")
-                .playerOnly()
-        );
+        registerCommand(new CommandReply(api));
 
         // Register the /togglemessage command
-        registerCommand(new CommandBuilder(new CommandToggleMessage(api))
-                .name("togglemessage")
-                .aliases("tm", "togglemsg", "tmsg", "togglepm", "tpm")
-                .description("Toggle private messages.")
-                .playerOnly()
-        );
+        registerCommand(new CommandToggleMessage(api));
 
         // Register the /togglemessagesound command
-        registerCommand(new CommandBuilder(new CommandToggleMessageSound(api))
-                .name("togglemessagesound")
-                .aliases("tms", "togglemsgsound", "tmsgs", "togglepmsound", "tpms", "togglesound")
-                .description("Toggle private message sounds.")
-                .playerOnly()
-        );
+        registerCommand(new CommandToggleMessageSound(api));
 
         // Register the /seen command
-        registerCommand(new CommandBuilder(new CommandSeen(api))
-                .name("seen")
-                .description("Check when a player was last online.")
-                .params("player")
-                .usage("/seen <player>")
-                .playerOnly()
-        );
+        registerCommand(new CommandSeen(api));
 
         // Register /datejoin command
-        registerCommand(new CommandBuilder(new CommandDateJoin(api))
-                .name("datejoin")
-                .aliases("joindate")
-                .description("Check when you first joined the server.")
-                .playerOnly()
-        );
+        registerCommand(new CommandDateJoin(api));
 
         // Register /info command
-        registerCommand(new CommandBuilder(new CommandInfo(this))
-                .name("info")
-                .description("View server information.")
-                .playerOnly()
-        );
+        registerCommand(new CommandInfo(this));
     }
 
     /**

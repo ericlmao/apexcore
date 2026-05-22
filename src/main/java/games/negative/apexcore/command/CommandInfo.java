@@ -1,7 +1,8 @@
 package games.negative.apexcore.command;
 
 import games.negative.alumina.command.Command;
-import games.negative.alumina.command.Context;
+import games.negative.alumina.command.CommandContext;
+import games.negative.alumina.command.builder.CommandBuilder;
 import games.negative.alumina.util.NumberUtil;
 import games.negative.alumina.util.TimeUtil;
 import games.negative.apexcore.ApexCore;
@@ -18,20 +19,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class CommandInfo implements Command {
+public class CommandInfo extends Command {
 
     private final ApexCore plugin;
     private final ApexAPI api;
 
     public CommandInfo(@NotNull ApexCore plugin) {
+        super(CommandBuilder.builder()
+                .name("info")
+                .description("View server information")
+                .playerOnly(true)
+        );
+
         this.plugin = plugin;
         this.api = plugin.api();
     }
 
     @Override
-    public void execute(@NotNull Context context) {
-        Player player = context.getPlayer();
-        assert player != null;
+    public void execute(@NotNull CommandContext context) {
+        Player player = context.player().orElseThrow();
 
         String uptime = TimeUtil.format(Math.abs(plugin.getStart() - System.currentTimeMillis()), true);
         String start = Placeholder.SERVER_START.toString();
@@ -47,7 +53,8 @@ public class CommandInfo implements Command {
         long sizeBytes = calculateWorldSizeInBytes(world);
         String parsed = formatSizeInBytes(sizeBytes);
 
-        Locale.SERVER_INFO.replace("%server_start%", start)
+        Locale.SERVER_INFO.create()
+                .replace("%server_start%", start)
                 .replace("%uptime%", uptime)
                 .replace("%tps%", tps)
                 .replace("%unique%", NumberUtil.decimalFormat(unique))
